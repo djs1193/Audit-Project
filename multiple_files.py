@@ -5,7 +5,7 @@ import glob
 
 
 import glob, os
-os.chdir("dumps")
+os.chdir("Kyle")
 
 all_files = []
 for f in glob.glob("*.xml"):
@@ -56,13 +56,13 @@ for all_moc in moc_list:
             val_txt = moc.text.split()
             if len(val_txt) == 1:
 #                print('%s : %s'%(val_name,val_txt[0]))
-                column_1.append(val_name)
-                column_2.append(val_txt[0])
+                column_1.append(str(val_name))
+                column_2.append(str(val_txt[0]))
                 index.append(i)
                 paths.append(path)
             if len(val_txt) == 0:
 #                print('%s : '%(val_name))
-                column_1.append(val_name)
+                column_1.append(str(val_name))
                 column_2.append(" ")
                 index.append(i)
                 paths.append(path)
@@ -75,12 +75,16 @@ def worksheet_name(moc):
         return(moc)
 
 
+
+
 Moc_List = list(sorted(set(Unique_Index)))
 df = pd.DataFrame({'INDEX':index, 'PATHS': paths, 'MOC':column_1, 'VALUES': column_2 })
 
 
 
-writer = pd.ExcelWriter('results.xlsx')
+os.chdir("..")
+
+writer = pd.ExcelWriter('Kyle.xlsx',options={'strings_to_urls': False})
 
 for moc in Moc_List:
     f = df.loc[df['INDEX'] == moc]
@@ -90,5 +94,5 @@ for moc in Moc_List:
                          values=["VALUES"],
                          aggfunc=lambda x: ' '.join(str(v) for v in x))
     w_name = worksheet_name(moc)
-    pivot_table.to_excel(writer, sheet_name = moc)
+    pivot_table.to_excel(writer, sheet_name = w_name)
 writer.close()
